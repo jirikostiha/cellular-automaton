@@ -2,5 +2,6 @@
 {
     public record GenerationProcessorOptions
     {
+        public bool CleanBorders { get; set; }
     }
 }

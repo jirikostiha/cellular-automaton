@@ -8,15 +8,16 @@
         private IArray2D<bool> _current;
         private IArray2D<bool> _previous;
 
-        //private GenerationProcessorOptions _options;
+        private GenerationProcessorOptions _options;
 
-        public GenerationProcessor(IArray2D<bool> matrix)
+        public GenerationProcessor(IArray2D<bool> matrix, GenerationProcessorOptions options = null)
         {
             _current = matrix;
+            _options = options;
             _previous = _current.Clone() as IArray2D<bool>;
         }
 
-        //public GenerationProcessorOptions Options => _options;
+        public GenerationProcessorOptions Options => _options;
 
         public IArray2D<bool> Matrix => _current;
 
@@ -33,7 +34,12 @@
             _previous = _current;
             var xmax = _current.XCount;
             var ymax = _current.YCount;
-            previousBackup.SetRegion(1, 1, xmax - 2, ymax - 2, false); //reset inner cells
+            if (_options.CleanBorders)
+                //reset all cells
+                previousBackup.SetRegion(0, 0, xmax - 1, ymax - 1, false);
+            else
+                //reset inner cells only
+                previousBackup.SetRegion(1, 1, xmax - 2, ymax - 2, false);
             _current = previousBackup;
 
             var died = 0;
@@ -85,6 +91,14 @@
             if (matrix.GetAt(x - 1, y))
                 count++;
             if (matrix.GetAt(x + 1, y))
+                count++;
+            if (matrix.GetAt(x + 1, y + 1))
+                count++;
+            if (matrix.GetAt(x + 1, y - 1))
+                count++;
+            if (matrix.GetAt(x - 1, y + 1))
+                count++;
+            if (matrix.GetAt(x - 1, y - 1))
                 count++;
 
             return count;
