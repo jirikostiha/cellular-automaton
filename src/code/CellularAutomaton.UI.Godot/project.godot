@@ -22,6 +22,7 @@ AppGlobal="*res://global/AppGlobal.cs"
 [display]
 
 window/size/width=800
+window/size/height=800
 
 [editor_plugins]
 

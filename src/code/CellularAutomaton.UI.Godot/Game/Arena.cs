@@ -20,6 +20,12 @@ namespace CellularAutomaton.UI.Godot
             Vizer = new BitArray2DToImageVizualizer(VizuOptions);
         }
 
+        [Signal] 
+        public delegate void TimeChanged(float time);
+
+        [Signal] 
+        public delegate void IterationChanged(int iteration, int died, int survived, int resurected);
+
         public BitArray2DToImageVizualizer Vizer { get; set; }
 
         public BitArray2DVizuOptions VizuOptions { get; private set; }
@@ -96,11 +102,8 @@ namespace CellularAutomaton.UI.Godot
 
             _time = 0;
             _iteration = 0;
-            InfoPanel.Time = 0;
-            InfoPanel.Iteration = 0;
-            InfoPanel.Died = 0;
-            InfoPanel.Survived = 0;
-            InfoPanel.Resurected = 0;
+            EmitSignal(nameof(TimeChanged), _time);
+            EmitSignal(nameof(IterationChanged), 0, 0, 0, 0);
 
             Update();
         }
@@ -151,15 +154,8 @@ namespace CellularAutomaton.UI.Godot
             
             var stats = _processor.Next();
 
-            //emit signals
-            //emit time as one variable (delta)
-            InfoPanel.Time = _time;
-            InfoPanel.Iteration = _iteration;
-
-            //died-survived-resurected
-            InfoPanel.Died = stats.Died;
-            InfoPanel.Survived = stats.Survived;
-            InfoPanel.Resurected = stats.Resurested;
+            EmitSignal(nameof(TimeChanged), _time);
+            EmitSignal(nameof(IterationChanged), _iteration, stats.Died, stats.Survived, stats.Resurested);
 
             _toProcess--;
         }

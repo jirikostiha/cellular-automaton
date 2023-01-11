@@ -26,11 +26,25 @@ namespace CellularAutomaton.UI.Godot
             _survivedLabel = GetNode<Label>("Survived/Value");
             _resurectedLabel = GetNode<Label>("Resurected/Value");
 
+            var arena = FindParent("GameScreen").GetNode("%Arena");
+            arena.Connect(nameof(Arena.TimeChanged), this, nameof(TimeChangedHandler));
+            arena.Connect(nameof(Arena.IterationChanged), this, nameof(IterationChangedHandler));
+
             Time = 0;
             Iteration = 0;
             Died = 0;
             Survived = 0;
             Resurected = 0;
+        }
+
+        public void TimeChangedHandler(float time) => Time = time;
+
+        public void IterationChangedHandler(int iteration, int died, int survived, int resurected)
+        {
+            Iteration = iteration;
+            Died = died;
+            Survived = survived;
+            Resurected = resurected;
         }
     }
 }

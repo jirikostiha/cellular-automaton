@@ -1,48 +1,12 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://Game/InfolPanel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Game/Arena.cs" type="Script" id=3]
 [ext_resource path="res://Game/ControlPanel.tscn" type="PackedScene" id=4]
 
-[sub_resource type="GDScript" id=1]
-script/source = "extends Control
-
-const PauseAction = \"ui_pause\"
-const ToggleBreakMenuAction = \"ui_cancel\"
-
-onready var game_node = find_parent(\"Game\") #todo const
-
-func _input(event):
-	checkToggleBreakMenu(event);
-	checkPause(event);
-
-func checkPause(event: InputEvent):
-	if (event.is_action_pressed(PauseAction)):
-		if (get_tree().paused == false):
-			print(\"pause\")
-			get_tree().paused = true
-		else:
-			print(\"unpause\")
-			get_tree().paused = false
-
-func checkToggleBreakMenu(event: InputEvent):
-	if (event.is_action_pressed(ToggleBreakMenuAction)):
-		print(\"toggling break menu visibility\")
-		var menu = game_node.get_node(\"Controls/BreakMenu\")
-		if menu.visible:
-			SceneSwitcher.hide_scene(menu, true)
-		else:
-			SceneSwitcher.show_scene(menu, true)
-"
-
 [node name="GameScreen" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-
-[node name="UserActions" type="Control" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-script = SubResource( 1 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_right = 1.0
@@ -70,9 +34,10 @@ size_flags_horizontal = 1
 size_flags_vertical = 1
 
 [node name="Arena" type="ColorRect" parent="VBoxContainer"]
+unique_name_in_owner = true
 margin_top = 74.0
 margin_right = 800.0
-margin_bottom = 600.0
+margin_bottom = 800.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 0.0588235, 0.0431373, 0.0431373, 1 )
