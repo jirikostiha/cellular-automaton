@@ -32,7 +32,7 @@ namespace CellularAutomaton
             var bitArrayClone = new BitArray[_arrayList.Length];
             for (int i = 0; i < bitArrayClone.Length; i++)
                 bitArrayClone[i] = _arrayList[i].Clone() as BitArray;
-            
+
             return new BitArray2D(bitArrayClone);
         }
 
@@ -51,7 +51,7 @@ namespace CellularAutomaton
 
             // first row
             array[0] = new BitArray(xcount, bounderyValue);
-            
+
             // inner rows
             for (int y = 1; y < ycount - 1; y++)
             {
@@ -77,6 +77,6 @@ namespace CellularAutomaton
                     array[y].Set(x, bitValueProvider(x, y));
 
             return new BitArray2D(array);
-        }     
+        }
     }
 }

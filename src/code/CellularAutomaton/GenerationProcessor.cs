@@ -44,7 +44,7 @@
                 for (int y = 1; y < ymax - 1; y++)
                 {
                     var livingNeighborsCount = GetLivingNeighboursCount(_previous, x, y);
-                    if (_previous.GetAt(x,y)) // live cell from previous matrix
+                    if (_previous.GetAt(x, y)) // live cell from previous matrix
                     {
                         if (livingNeighborsCount < 2 || livingNeighborsCount > 3)
                         {
