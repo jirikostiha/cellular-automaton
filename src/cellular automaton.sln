@@ -26,7 +26,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{CAFF78B8-7F6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "quality", "quality", "{0F072251-51B0-4109-A566-0CA198CB02C0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CellularAutomaton", "code\CellularAutomaton\CellularAutomaton.csproj", "{CCF12E33-C8FD-4149-892C-7C0977323C14}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CCF12E33-C8FD-4149-892C-7C0977323C14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCF12E33-C8FD-4149-892C-7C0977323C14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCF12E33-C8FD-4149-892C-7C0977323C14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCF12E33-C8FD-4149-892C-7C0977323C14}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
