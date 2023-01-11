@@ -38,16 +38,13 @@
 *.userosscache
 *.sln.docstates
 
-
 #---Visual Studio Code---
 .vscode/
-
 
 #---ReSharper---
 _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
-
 
 #---Nuget---
 [Pp]ackages/
@@ -58,3 +55,13 @@ _ReSharper*/
 *.nuget.targets
 project.lock.json
 project.assets.json
+
+#---Godot---
+.godot/
+.import/
+export.cfg
+export_presets.cfg
+*.translation
+.mono/
+data_*/
+mono_crash.*.json

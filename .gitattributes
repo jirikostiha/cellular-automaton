@@ -137,10 +137,10 @@
 *.zip binary
 
 #---Godot---
-#*.godot text merge=union
-#*.gd text merge=union
-#*.tres text merge=union
-#*.png.import text merge=union
+*.godot text merge=union
+*.gd text merge=union
+*.tres text merge=union
+*.png.import text merge=union
 
 
 ###############################
