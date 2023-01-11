@@ -1,0 +1,30 @@
+[gd_resource type="Theme" load_steps=6 format=2]
+
+[ext_resource path="res://Menu/fonts/PressStart2P-Regular.ttf" type="DynamicFontData" id=1]
+
+[sub_resource type="DynamicFont" id=2]
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.117647, 0.0470588, 0.533333, 1 )
+
+[sub_resource type="DynamicFontData" id=3]
+font_path = "res://Menu/fonts/PressStart2P-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=4]
+font_data = SubResource( 3 )
+
+[resource]
+Button/colors/font_color = Color( 0.88, 0.88, 0.88, 1 )
+Button/colors/font_color_disabled = Color( 0.9, 0.9, 0.9, 0.2 )
+Button/colors/font_color_focus = Color( 0.94, 0.94, 0.94, 1 )
+Button/colors/font_color_hover = Color( 0.94, 0.94, 0.94, 1 )
+Button/colors/font_color_pressed = Color( 1, 1, 1, 1 )
+Button/constants/hseparation = 2
+Button/fonts/font = SubResource( 2 )
+Button/styles/disabled = null
+Button/styles/focus = null
+Button/styles/hover = SubResource( 1 )
+Button/styles/normal = null
+Button/styles/pressed = null
+ItemList/fonts/font = SubResource( 4 )

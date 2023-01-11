@@ -1,0 +1,84 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Game/InfolPanel.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Game/Arena.cs" type="Script" id=3]
+[ext_resource path="res://Game/ControlPanel.tscn" type="PackedScene" id=4]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Control
+
+const PauseAction = \"ui_pause\"
+const ToggleBreakMenuAction = \"ui_cancel\"
+
+onready var game_node = find_parent(\"Game\") #todo const
+
+func _input(event):
+	checkToggleBreakMenu(event);
+	checkPause(event);
+
+func checkPause(event: InputEvent):
+	if (event.is_action_pressed(PauseAction)):
+		if (get_tree().paused == false):
+			print(\"pause\")
+			get_tree().paused = true
+		else:
+			print(\"unpause\")
+			get_tree().paused = false
+
+func checkToggleBreakMenu(event: InputEvent):
+	if (event.is_action_pressed(ToggleBreakMenuAction)):
+		print(\"toggling break menu visibility\")
+		var menu = game_node.get_node(\"Controls/BreakMenu\")
+		if menu.visible:
+			SceneSwitcher.hide_scene(menu, true)
+		else:
+			SceneSwitcher.show_scene(menu, true)
+"
+
+[node name="GameScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="UserActions" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = SubResource( 1 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="InfoPanel" parent="VBoxContainer" instance=ExtResource( 2 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 800.0
+margin_bottom = 14.0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+
+[node name="ControlPanel" parent="VBoxContainer" instance=ExtResource( 4 )]
+unique_name_in_owner = true
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 18.0
+margin_right = 800.0
+margin_bottom = 70.0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+
+[node name="Arena" type="ColorRect" parent="VBoxContainer"]
+margin_top = 74.0
+margin_right = 800.0
+margin_bottom = 600.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0.0588235, 0.0431373, 0.0431373, 1 )
+script = ExtResource( 3 )
+
+[node name="MatrixSprite" type="Sprite" parent="VBoxContainer/Arena"]
+unique_name_in_owner = true
+scale = Vector2( 2, 2 )
+centered = false
