@@ -13,7 +13,7 @@
         public GenerationProcessor(IArray2D<bool> matrix, GenerationProcessorOptions options = null)
         {
             _current = matrix;
-            _options = options;
+            _options = options ?? new();
             _previous = _current.Clone() as IArray2D<bool>;
         }
 
