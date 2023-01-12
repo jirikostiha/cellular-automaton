@@ -1,4 +1,5 @@
 # Cellular Automaton  
+![Build workflow](https://github.com/jirikostiha/cellular-automaton/actions/workflows/build.yml/badge.svg)
 ![GitHub repo size](https://img.shields.io/github/repo-size/jirikostiha/cellular-automaton)  
 
 Is implementation of Conway's Game of Life.  
