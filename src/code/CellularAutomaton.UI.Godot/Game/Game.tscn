@@ -1,5 +1,6 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
+[ext_resource path="res://Game/MatrixSprite.gd" type="Script" id=1]
 [ext_resource path="res://Game/InfolPanel.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Game/Arena.cs" type="Script" id=3]
 [ext_resource path="res://Game/ControlPanel.tscn" type="PackedScene" id=4]
@@ -47,3 +48,4 @@ script = ExtResource( 3 )
 unique_name_in_owner = true
 scale = Vector2( 2, 2 )
 centered = false
+script = ExtResource( 1 )
