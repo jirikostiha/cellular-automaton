@@ -68,14 +68,6 @@ namespace CellularAutomaton.UI.Godot
                 Vizer.Vizualize(_processor.Matrix, MatrixSprite.Texture as ImageTexture);
         }
 
-        //public override void _Input(InputEvent inputEvent)
-        //{
-        //    if (inputEvent.IsActionPressed("zoom_in"))
-        //        RectScale *= 0.9f;
-        //    if (inputEvent.IsActionPressed("zoom_out"))
-        //        RectScale *= 1.1f;
-        //}
-
         public void CreateNewHandler()
         {
             if (_toProcess != 0)
