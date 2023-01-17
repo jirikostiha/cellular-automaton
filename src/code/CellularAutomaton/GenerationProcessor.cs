@@ -10,7 +10,7 @@
 
         private GenerationProcessorOptions _options;
 
-        public GenerationProcessor(IArray2D<bool> matrix, GenerationProcessorOptions options = null)
+        public GenerationProcessor(IArray2D<bool> matrix, GenerationProcessorOptions? options = null)
         {
             _current = matrix;
             _options = options ?? new();
