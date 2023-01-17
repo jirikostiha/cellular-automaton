@@ -14,7 +14,7 @@ namespace CellularAutomaton
             {
                 for (int y = 0; y < array2D.YCount; y++)
                 {
-                    if (array2D.GetAt(x,y))
+                    if (array2D.GetAt(x, y))
                         builder.Append($"{x},{y}").Append(Separator);
                 }
             }

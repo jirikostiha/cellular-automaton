@@ -15,7 +15,7 @@
                 BitArray2D.Create(xcount, ycount, true));
 
             var content = serializer.Serialize(array2D);
-            
+
             Assert.Equal("size:4x11", content.Split(Environment.NewLine).First());
         }
 

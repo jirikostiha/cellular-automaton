@@ -13,7 +13,7 @@
             var serializer = new BoolArray2DSerializer();
 
             var content = serializer.Serialize(array2D);
-            
+
             Assert.Equal(4, content.Split(serializer.Separator).Length);
             Assert.Equal("1,1", content.Split(serializer.Separator).First());
         }

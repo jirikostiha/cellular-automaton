@@ -17,7 +17,7 @@ namespace CellularAutomaton
 
         public string Serialize(IArray2D<bool> array2D)
             => $"size:{array2D.XCount}x{array2D.YCount}"
-                + Environment.NewLine 
+                + Environment.NewLine
                 + _arraySerializer.Serialize(array2D);
 
         public IArray2D<bool> Deserialize(string contentWithHeader)
@@ -27,7 +27,7 @@ namespace CellularAutomaton
             var xmax = int.Parse(size.Groups[1].Value);
             var ymax = int.Parse(size.Groups[2].Value);
             IArray2D<bool> array2D = _arrayCreator(xmax, ymax);
-            array2D.SetRegion(0,0, xmax-1, ymax-1, false);
+            array2D.SetRegion(0, 0, xmax - 1, ymax - 1, false);
             string body = contentWithHeader.Substring(contentWithHeader.IndexOf(Environment.NewLine) + 1);
             _arraySerializer.Deserialize(body, array2D);
 
