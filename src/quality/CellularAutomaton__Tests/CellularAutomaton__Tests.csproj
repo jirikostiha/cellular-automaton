@@ -22,7 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\code\CellularAutomaton\CellularAutomaton.csproj" />
+		<ProjectReference Include="..\..\code\CellularAutomaton\CellularAutomaton.csproj" />
 	</ItemGroup>
 
 </Project>
