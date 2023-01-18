@@ -27,6 +27,8 @@ namespace CellularAutomaton
                     _arrayList[y][x] = value;
         }
 
+        public void Clean() => SetRegion(0, 0, XCount - 1, YCount - 1, false);
+
         public object Clone()
         {
             var bitArrayClone = new BitArray[_arrayList.Length];

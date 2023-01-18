@@ -13,5 +13,7 @@ namespace CellularAutomaton
         void SetAt(int x, int y, T value);
 
         void SetRegion(int xA, int yA, int xB, int yB, T value);
+
+        void Clean();
     }
 }
