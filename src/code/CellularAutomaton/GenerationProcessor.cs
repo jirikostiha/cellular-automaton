@@ -1,17 +1,40 @@
-﻿namespace CellularAutomaton
+﻿using CommunityToolkit.Diagnostics;
+
+namespace CellularAutomaton
 {
     public class GenerationProcessor
     {
         private IArray2D<bool> _current;
         private IArray2D<bool> _previous;
+        private IArray2D<bool>? _immortals;
 
         private GenerationProcessorOptions _options;
 
-        public GenerationProcessor(IArray2D<bool> matrix, GenerationProcessorOptions? options = null)
+        public GenerationProcessor(IArray2D<bool> initialMatrix, GenerationProcessorOptions? options = null)
         {
-            _current = matrix;
+            Guard.IsNotNull(initialMatrix);
+
+            _current = initialMatrix;
             _options = options ?? new();
             _previous = _current.Clone() as IArray2D<bool>;
+        }
+
+        public GenerationProcessor(IArray2D<bool> initialMatrix, IArray2D<bool> permanentLiveMatrix, GenerationProcessorOptions? options = null)
+            : this(initialMatrix, options)
+        {
+            Guard.IsEqualTo(permanentLiveMatrix.XCount, initialMatrix.XCount);
+            Guard.IsEqualTo(permanentLiveMatrix.YCount, initialMatrix.YCount);
+
+            _immortals = permanentLiveMatrix;
+            //reflect immortals to current populations
+            for (int x = 0; x < _current.XCount; x++)
+            {
+                for (int y = 0; y < _current.YCount; y++)
+                {
+                    if (_immortals.GetAt(x, y))
+                        _current.SetAt(x,y,true);
+                }
+            }
         }
 
         public GenerationProcessorOptions Options => _options;
@@ -51,8 +74,12 @@
                     {
                         if (livingNeighborsCount < 2 || livingNeighborsCount > 3)
                         {
-                            _current.SetAt(x, y, false); // died
-                            died++;
+                            if (_immortals is null || !_immortals.GetAt(x,y))
+                            {
+                                _current.SetAt(x, y, false); // died
+                                died++;
+                            }
+                            //else cannot die - is immortal
                         }
                         else
                         {
