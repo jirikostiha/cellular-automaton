@@ -1,8 +1,5 @@
 ﻿namespace CellularAutomaton
 {
-    using System;
-    using System.Collections;
-
     public class GenerationProcessor
     {
         private IArray2D<bool> _current;
@@ -19,7 +16,7 @@
 
         public GenerationProcessorOptions Options => _options;
 
-        public IArray2D<bool> Matrix => _current;
+        public ReadonlyArray2D<bool> Matrix => new ReadonlyArray2D<bool>(_current);
 
         /// <summary>
         /// Any live cell with fewer than two live neighbours dies, as if caused by underpopulation.
