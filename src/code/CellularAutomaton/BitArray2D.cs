@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Diagnostics;
+using System;
 using System.Collections;
 
 namespace CellularAutomaton
@@ -9,6 +10,8 @@ namespace CellularAutomaton
 
         public BitArray2D(BitArray[] underlyingArray)
         {
+            Guard.IsNotNull(underlyingArray);
+
             _arrayList = underlyingArray;
         }
 

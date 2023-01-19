@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.Diagnostics;
+using System;
 
 namespace CellularAutomaton
 {
@@ -8,6 +9,8 @@ namespace CellularAutomaton
 
         public BoolArray2D(bool[,] underlyingArray)
         {
+            Guard.IsNotNull(underlyingArray);
+
             _array = underlyingArray;
         }
 

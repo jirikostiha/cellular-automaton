@@ -1,6 +1,6 @@
 ﻿namespace CellularAutomaton
 {
-    public struct ReadonlyArray2D<T> : IReadableArray2D<T>
+    public readonly struct ReadonlyArray2D<T> : IReadableArray2D<T>
     {
         private readonly IArray2D<T> _array;
 
