@@ -16,7 +16,7 @@
                     Assert.False(processor.Matrix.GetAt(x, y));
 
             Assert.Equal(0, stats.Died);
-            Assert.Equal(0, stats.Resurested);
+            Assert.Equal(0, stats.Revived);
             Assert.Equal(0, stats.Survived);
         }
 
@@ -34,7 +34,7 @@
             Assert.True(processor.Matrix.GetAt(1, 1));
 
             Assert.Equal(0, stats.Died);
-            Assert.Equal(0, stats.Resurested);
+            Assert.Equal(0, stats.Revived);
             Assert.Equal(0, stats.Survived);
         }
 
@@ -52,7 +52,7 @@
             Assert.True(processor.Matrix.GetAt(2, 2));
 
             Assert.Equal(0, stats.Died);
-            Assert.Equal(0, stats.Resurested);
+            Assert.Equal(0, stats.Revived);
             Assert.Equal(4, stats.Survived);
         }
 
@@ -81,13 +81,13 @@
             Assert.False(processor.Matrix.GetAt(2, 3));
 
             Assert.Equal(2, stats1.Died);
-            Assert.Equal(2, stats1.Resurested);
+            Assert.Equal(2, stats1.Revived);
             Assert.Equal(1, stats1.Survived);
 
             var stats2 = processor.Next();
 
             Assert.Equal(2, stats2.Died);
-            Assert.Equal(2, stats2.Resurested);
+            Assert.Equal(2, stats2.Revived);
             Assert.Equal(1, stats2.Survived);
         }
 
@@ -112,7 +112,7 @@
             Assert.True(processor.Matrix.GetAt(3, 3));
 
             Assert.Equal(0, stats.Died);
-            Assert.Equal(0, stats.Resurested);
+            Assert.Equal(0, stats.Revived);
             Assert.Equal(0, stats.Survived);
         }
 
@@ -134,13 +134,13 @@
 
             Assert.Equal(4, stats1.Survived);
             Assert.Equal(1, stats1.Died);
-            Assert.Equal(0, stats1.Resurested);
+            Assert.Equal(0, stats1.Revived);
 
             var stats2 = processor.Next();
 
             Assert.Equal(0, stats2.Survived);
             Assert.Equal(4, stats2.Died);
-            Assert.Equal(0, stats2.Resurested);
+            Assert.Equal(0, stats2.Revived);
         }
     }
 }
