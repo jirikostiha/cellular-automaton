@@ -7,6 +7,7 @@ namespace CellularAutomaton
         private IArray2D<bool> _current;
         private IArray2D<bool> _previous;
         private IArray2D<bool>? _immortals;
+        private IArray2D<bool>? _inanimates;
 
         private GenerationProcessorOptions _options;
 
@@ -19,7 +20,7 @@ namespace CellularAutomaton
             _previous = _current.Clone() as IArray2D<bool>;
         }
 
-        public GenerationProcessor(IArray2D<bool> initialMatrix, IArray2D<bool> permanentLiveMatrix, GenerationProcessorOptions? options = null)
+        public GenerationProcessor(IArray2D<bool> initialMatrix, IArray2D<bool>? immortals, IArray2D<bool>? inanimates, GenerationProcessorOptions? options = null)
             : this(initialMatrix, options)
         {
             Guard.IsEqualTo(permanentLiveMatrix.XCount, initialMatrix.XCount);
@@ -91,8 +92,12 @@ namespace CellularAutomaton
                     {
                         if (livingNeighborsCount == 3)
                         {
-                            _current.SetAt(x, y, true); // resurection
-                            resurected++;
+                            if (_inanimates is null || !_inanimates.GetAt(x, y))
+                            {
+                                _current.SetAt(x, y, true); // resurection
+                                resurected++;
+                            }
+                            //else cannot be resurected - is inanimate
                         }
                         else
                         {
