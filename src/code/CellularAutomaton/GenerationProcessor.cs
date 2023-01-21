@@ -7,7 +7,7 @@ namespace CellularAutomaton
         private IArray2D<bool> _current;
         private IArray2D<bool> _previous;
         private IArray2D<bool>? _immortals;
-        private IArray2D<bool>? _unviables; //Unviability
+        private IArray2D<bool>? _unviables;
 
         private GenerationProcessorOptions _options;
 
