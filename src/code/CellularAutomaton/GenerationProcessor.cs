@@ -7,7 +7,7 @@ namespace CellularAutomaton
         private IArray2D<bool> _current;
         private IArray2D<bool> _previous;
         private IArray2D<bool>? _immortals;
-        private IArray2D<bool>? _inanimates;
+        private IArray2D<bool>? _unviables; //Unviability
 
         private GenerationProcessorOptions _options;
 
@@ -20,7 +20,7 @@ namespace CellularAutomaton
             _previous = _current.Clone() as IArray2D<bool>;
         }
 
-        public GenerationProcessor(IArray2D<bool> initialMatrix, IArray2D<bool>? immortals, IArray2D<bool>? inanimates, GenerationProcessorOptions? options = null)
+        public GenerationProcessor(IArray2D<bool> initialMatrix, IArray2D<bool>? immortals, IArray2D<bool>? unviables, GenerationProcessorOptions? options = null)
             : this(initialMatrix, options)
         {
             if (immortals is not null)
@@ -30,12 +30,12 @@ namespace CellularAutomaton
 
                 _immortals = immortals;
             }
-            if (inanimates is not null)
+            if (unviables is not null)
             {
-                Guard.IsEqualTo(inanimates.XCount, initialMatrix.XCount);
-                Guard.IsEqualTo(inanimates.YCount, initialMatrix.YCount);
+                Guard.IsEqualTo(unviables.XCount, initialMatrix.XCount);
+                Guard.IsEqualTo(unviables.YCount, initialMatrix.YCount);
 
-                _inanimates = inanimates;
+                _unviables = unviables;
             }
         }
 
@@ -49,9 +49,9 @@ namespace CellularAutomaton
         public IArray2D<bool>? Immortals => _immortals;
 
         /// <summary>
-        /// Inanimate cell flags.
+        /// Unviable cell flags.
         /// </summary>
-        public IArray2D<bool>? Inanimates => _inanimates;
+        public IArray2D<bool>? Unviables => _unviables;
 
         /// <summary>
         /// Any live cell with fewer than two live neighbours dies, as if caused by underpopulation.
@@ -59,7 +59,7 @@ namespace CellularAutomaton
         /// Any live cell with more than three live neighbours dies, as if by overpopulation.
         /// Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
         /// </summary>
-        public (int Died, int Resurested, int Survived) Next()
+        public (int Died, int Revived, int Survived) Next()
         {
             // swap matrices
             var previousBackup = _previous; // backup and reuse memory
@@ -75,7 +75,7 @@ namespace CellularAutomaton
             _current = previousBackup;
 
             var died = 0;
-            var resurected = 0;
+            var revived = 0;
             var survived = 0;
             for (int x = 1; x < xmax - 1; x++)
             {
@@ -103,12 +103,12 @@ namespace CellularAutomaton
                     {
                         if (livingNeighborsCount == 3)
                         {
-                            if (_inanimates is null || !_inanimates.GetAt(x, y))
+                            if (_unviables is null || !_unviables.GetAt(x, y))
                             {
-                                _current.SetAt(x, y, true); // resurection
-                                resurected++;
+                                _current.SetAt(x, y, true); // revival
+                                revived++;
                             }
-                            //else cannot be resurected - is inanimate
+                            //else cannot be revived - is unviable
                         }
                         else
                         {
@@ -118,7 +118,7 @@ namespace CellularAutomaton
                 }
             }
 
-            return (died, resurected, survived);
+            return (died, revived, survived);
         }
 
         private int GetLivingNeighboursCount(IArray2D<bool> matrix, int x, int y)
