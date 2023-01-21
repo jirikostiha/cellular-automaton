@@ -23,24 +23,35 @@ namespace CellularAutomaton
         public GenerationProcessor(IArray2D<bool> initialMatrix, IArray2D<bool>? immortals, IArray2D<bool>? inanimates, GenerationProcessorOptions? options = null)
             : this(initialMatrix, options)
         {
-            Guard.IsEqualTo(permanentLiveMatrix.XCount, initialMatrix.XCount);
-            Guard.IsEqualTo(permanentLiveMatrix.YCount, initialMatrix.YCount);
-
-            _immortals = permanentLiveMatrix;
-            //reflect immortals to current populations
-            for (int x = 0; x < _current.XCount; x++)
+            if (immortals is not null)
             {
-                for (int y = 0; y < _current.YCount; y++)
-                {
-                    if (_immortals.GetAt(x, y))
-                        _current.SetAt(x,y,true);
-                }
+                Guard.IsEqualTo(immortals.XCount, initialMatrix.XCount);
+                Guard.IsEqualTo(immortals.YCount, initialMatrix.YCount);
+
+                _immortals = immortals;
+            }
+            if (inanimates is not null)
+            {
+                Guard.IsEqualTo(inanimates.XCount, initialMatrix.XCount);
+                Guard.IsEqualTo(inanimates.YCount, initialMatrix.YCount);
+
+                _inanimates = inanimates;
             }
         }
 
         public GenerationProcessorOptions Options => _options;
 
         public ReadonlyArray2D<bool> Matrix => new ReadonlyArray2D<bool>(_current);
+
+        /// <summary>
+        /// Immortal cell flags.
+        /// </summary>
+        public IArray2D<bool>? Immortals => _immortals;
+
+        /// <summary>
+        /// Inanimate cell flags.
+        /// </summary>
+        public IArray2D<bool>? Inanimates => _inanimates;
 
         /// <summary>
         /// Any live cell with fewer than two live neighbours dies, as if caused by underpopulation.
@@ -71,7 +82,7 @@ namespace CellularAutomaton
                 for (int y = 1; y < ymax - 1; y++)
                 {
                     var livingNeighborsCount = GetLivingNeighboursCount(_previous, x, y);
-                    if (_previous.GetAt(x, y)) // live cell from previous matrix
+                    if (_previous.GetAt(x, y)) // living cell from previous generation matrix
                     {
                         if (livingNeighborsCount < 2 || livingNeighborsCount > 3)
                         {
@@ -101,7 +112,7 @@ namespace CellularAutomaton
                         }
                         else
                         {
-                            _current.SetAt(x, y, false); // still dead
+                            _current.SetAt(x, y, false); // remains dead
                         }
                     }
                 }
