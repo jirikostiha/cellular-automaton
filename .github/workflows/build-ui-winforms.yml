@@ -1,0 +1,32 @@
+name: Build Winforms UI
+
+env:
+  sln-path: "./src/cellular automaton winforms.sln"
+
+on: 
+  push:
+    paths:
+      - 'src/code/CellularAutomaton.UI.WinForms/**'
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        dotnet-version: [ '2.0.x' ]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+      uses: actions/setup-dotnet@v3
+      with:
+         dotnet-version: ${{ matrix.dotnet-version }}
+
+    - name: Restore dependencies
+      run: dotnet restore "${{ env.sln-path }}"
+
+    - name: Build #debug build
+      run: dotnet build "${{ env.sln-path }}" --no-restore
