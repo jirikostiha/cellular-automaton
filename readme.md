@@ -3,4 +3,11 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/jirikostiha/cellular-automaton)  
 
 Is implementation of Conway's Game of Life.  
-For details see [wikipedia](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life).
+
+## Sources  
+[Wikipedia](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life)  
+[Plus magazine](https://plus.maths.org/content/cellular-automata)  
+[ConwayLife.com - Life Lexicon](https://conwaylife.com/ref/lexicon/lex_home.htm)  
+[ConwayLife.com - patterns forum](https://conwaylife.com/forums/viewtopic.php?f=2&t=2160)  
+[Game of Life](https://playgameoflife.com/)  
+[b3s23life blog](http://b3s23life.blogspot.com/)  
