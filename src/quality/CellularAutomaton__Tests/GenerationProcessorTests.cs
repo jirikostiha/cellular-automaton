@@ -60,6 +60,23 @@
         }
 
         [Fact]
+        public void Next_UnviableCell_CannotBeRevived()
+        {
+            var matrix = BitArray2D.Create(4, 4, false);
+            matrix.SetAt(1, 1, true);
+            matrix.SetAt(1, 2, true);
+            matrix.SetAt(2, 1, true);
+            var unviables = BitArray2D.Create(4, 4, false);
+            unviables.SetAt(2, 2, true);
+            var processor = new GenerationProcessor(matrix, null, unviables);
+
+            var stats = processor.Next();
+
+            Assert.False(processor.Matrix.GetAt(2, 2));
+            Assert.Equal(0, stats.Revived);
+        }
+
+        [Fact]
         public void Next_BlockScenario()
         {
             var matrix = BitArray2D.Create(4, 4, true, false);
