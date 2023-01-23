@@ -47,7 +47,10 @@
             matrix.SetAt(2, 1, true);
             var immortals = BitArray2D.Create(4, 4, false);
             immortals.SetAt(1,1, true);
-            var processor = new GenerationProcessor(matrix, immortals, null);
+            var processor = new GenerationProcessor(matrix)
+            {
+                Immortals = immortals
+            };
 
             processor.Next();
 
@@ -68,7 +71,10 @@
             matrix.SetAt(2, 1, true);
             var unviables = BitArray2D.Create(4, 4, false);
             unviables.SetAt(2, 2, true);
-            var processor = new GenerationProcessor(matrix, null, unviables);
+            var processor = new GenerationProcessor(matrix)
+            {
+                Unviables = unviables,
+            };
 
             var stats = processor.Next();
 

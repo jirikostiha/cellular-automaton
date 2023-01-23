@@ -20,25 +20,6 @@ namespace CellularAutomaton
             _previous = _current.Clone() as IArray2D<bool>;
         }
 
-        public GenerationProcessor(IArray2D<bool> initialMatrix, IArray2D<bool>? immortals, IArray2D<bool>? unviables, GenerationProcessorOptions? options = null)
-            : this(initialMatrix, options)
-        {
-            if (immortals is not null)
-            {
-                Guard.IsEqualTo(immortals.XCount, initialMatrix.XCount);
-                Guard.IsEqualTo(immortals.YCount, initialMatrix.YCount);
-
-                _immortals = immortals;
-            }
-            if (unviables is not null)
-            {
-                Guard.IsEqualTo(unviables.XCount, initialMatrix.XCount);
-                Guard.IsEqualTo(unviables.YCount, initialMatrix.YCount);
-
-                _unviables = unviables;
-            }
-        }
-
         public GenerationProcessorOptions Options => _options;
 
         public ReadonlyArray2D<bool> Matrix => new ReadonlyArray2D<bool>(_current);
@@ -46,12 +27,38 @@ namespace CellularAutomaton
         /// <summary>
         /// Immortal cell flags.
         /// </summary>
-        public IArray2D<bool>? Immortals => _immortals;
+        public IArray2D<bool>? Immortals 
+        { 
+            get => _immortals;
+            set
+            {
+                if (value is not null)
+                {
+                    Guard.IsEqualTo(value.XCount, Matrix.XCount);
+                    Guard.IsEqualTo(value.YCount, Matrix.YCount);
+
+                    _immortals = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Unviable cell flags.
         /// </summary>
-        public IArray2D<bool>? Unviables => _unviables;
+        public IArray2D<bool>? Unviables
+        {
+            get => _unviables;
+            set
+            {
+                if (value is not null)
+                {
+                    Guard.IsEqualTo(value.XCount, Matrix.XCount);
+                    Guard.IsEqualTo(value.YCount, Matrix.YCount);
+
+                    _unviables = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Any live cell with fewer than two live neighbours dies, as if caused by underpopulation.
