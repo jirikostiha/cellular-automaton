@@ -39,6 +39,27 @@
         }
 
         [Fact]
+        public void Next_ImmortalCell_ResurectedAndSurviving()
+        {
+            var matrix = BitArray2D.Create(4, 4, false);
+            matrix.SetAt(0, 0, true);
+            matrix.SetAt(1, 2, true);
+            matrix.SetAt(2, 1, true);
+            var immortals = BitArray2D.Create(4, 4, false);
+            immortals.SetAt(1,1, true);
+            var processor = new GenerationProcessor(matrix, immortals, null);
+
+            processor.Next();
+
+            Assert.True(processor.Matrix.GetAt(1, 1));
+
+            var stats = processor.Next();
+
+            Assert.True(processor.Matrix.GetAt(1, 1));
+            Assert.Equal(1, stats.Survived);
+        }
+
+        [Fact]
         public void Next_BlockScenario()
         {
             var matrix = BitArray2D.Create(4, 4, true, false);
