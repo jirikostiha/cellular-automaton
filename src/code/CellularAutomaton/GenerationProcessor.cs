@@ -86,12 +86,16 @@ namespace CellularAutomaton
                     {
                         if (livingNeighborsCount < 2 || livingNeighborsCount > 3)
                         {
-                            if (_immortals is null || !_immortals.GetAt(x,y))
+                            if (_immortals is null || !_immortals.GetAt(x, y))
                             {
                                 _current.SetAt(x, y, false); // died
                                 died++;
                             }
-                            //else cannot die - is immortal
+                            else
+                            {
+                                _current.SetAt(x, y, true); //cannot die - is immortal
+                                survived++;
+                            }
                         }
                         else
                         {
