@@ -14,14 +14,14 @@ var scene_params = null
 func _ready():
 	pass
 
-func change_scene(next_scene: int, params=null):
+func change_scene_to_file(next_scene: int, params=null):
 	change_scene_by_path(_scene_map[next_scene], params)
 
 # Call this instead to be able to provide arguments to the next scene
 func change_scene_by_path(next_scene: String, params=null):
 	scene_params = params
-	assert(get_tree().change_scene(next_scene) == OK);
-	#var error_code = get_tree().change_scene(next_scene);
+	assert(get_tree().change_scene_to_file(next_scene) == OK);
+	#var error_code = get_tree().change_scene_to_file(next_scene);
 	#if error_code != OK:
 		#print("ERROR: Unavailable scene", error_code)
 	var current_scene_name = get_tree().get_current_scene().get_name()	
@@ -30,9 +30,9 @@ func change_scene_by_path(next_scene: String, params=null):
 		print("unpausing tree")
 		get_tree().paused = false
 
-func change_scene_to(next_scene: PackedScene, params=null):
+func change_scene_to_packed(next_scene: PackedScene, params=null):
 	scene_params = params
-	assert(get_tree().change_scene_to(next_scene) == OK);
+	assert(get_tree().change_scene_to_packed(next_scene) == OK);
 	var current_scene_name = get_tree().get_current_scene().get_name()
 	emit_signal("scene_changed", current_scene_name, next_scene.resource_name)
 	if get_tree().paused:
@@ -44,7 +44,7 @@ func append_scene(next_scene: int, params=null):
 	
 func append_scene_by_path(next_scene: String, params=null):
 	scene_params = params
-	var scene = load(next_scene).instance()
+	var scene = load(next_scene).instantiate()
 	get_tree().current_scene.add_child(scene)
 
 
@@ -71,7 +71,7 @@ func quit():
 	
 #Usage
 # In the calling scene
-#SceneSwitcher.change_scene("res://Game/Game.tscn", {"location":selected_location})
+#SceneSwitcher.change_scene_to_file("res://Game/Game.tscn", {"location":selected_location})
 
 # In the new scene
 #var current_location = SceneSwitcher.get_param("location")

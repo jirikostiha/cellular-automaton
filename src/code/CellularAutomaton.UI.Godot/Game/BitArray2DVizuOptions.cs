@@ -1,11 +1,11 @@
-﻿using Godot;
+using Godot;
 
 namespace CellularAutomaton.UI.Godot
 {
     public record BitArray2DVizuOptions
     {
-        public Color FalseColor { get; set; } = Color.ColorN("black");
+        public Color FalseColor { get; set; } = new Color("black");
 
-        public Color TrueColor { get; set; } = Color.ColorN("white");
+        public Color TrueColor { get; set; } = new Color("white");
     }
 }

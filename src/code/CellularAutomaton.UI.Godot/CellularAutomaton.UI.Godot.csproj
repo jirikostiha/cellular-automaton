@@ -1,29 +1,14 @@
-﻿<Project Sdk="Godot.NET.Sdk/3.3.0">
+<Project Sdk="Godot.NET.Sdk/4.0.0-beta.16">
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<EnableDynamicLoading>true</EnableDynamicLoading>
+		<LangVersion>latest</LangVersion>
+		<AnalysisLevel>latest-recommended</AnalysisLevel>
+		<Nullable>enable</Nullable>
+		<NoWarn>1701;1702;CA1707</NoWarn>
+	</PropertyGroup>
 
-    <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <LangVersion>latest</LangVersion>
-        <AnalysisLevel>latest-recommended</AnalysisLevel>
-      <Nullable>enable</Nullable>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-      <WarningLevel>6</WarningLevel>
-      <NoWarn>1701;1702;CA1707</NoWarn>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ExportDebug|AnyCPU'">
-      <WarningLevel>6</WarningLevel>
-      <NoWarn>1701;1702;CA1707;CA1050</NoWarn>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ExportRelease|AnyCPU'">
-      <WarningLevel>6</WarningLevel>
-      <NoWarn>1701;1702;CA1707;CA1050</NoWarn>
-    </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\CellularAutomaton\CellularAutomaton.csproj" />
-    </ItemGroup>
-
+	<ItemGroup>
+		<ProjectReference Include="..\CellularAutomaton\CellularAutomaton.csproj" />
+	</ItemGroup>
 </Project>

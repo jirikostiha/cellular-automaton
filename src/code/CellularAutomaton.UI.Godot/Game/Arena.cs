@@ -3,11 +3,11 @@ using System;
 
 namespace CellularAutomaton.UI.Godot
 {
-    public class Arena : ColorRect
+    public partial class Arena : ColorRect
     {
         private AppGlobal _global;
 
-        private float _time; // processing time
+        private double _time; // processing time
         private int _iteration; // generations
         private int _toProcess;
 
@@ -21,10 +21,10 @@ namespace CellularAutomaton.UI.Godot
         }
 
         [Signal] 
-        public delegate void TimeChanged(float time);
+        public delegate void TimeChangedEventHandler(double time);
 
         [Signal] 
-        public delegate void IterationChanged(int iteration, int died, int survived, int resurected);
+        public delegate void IterationChangedEventHandler(int iteration, int died, int survived, int resurected);
 
         public BitArray2DToImageVizualizer Vizer { get; set; }
 
@@ -34,23 +34,23 @@ namespace CellularAutomaton.UI.Godot
 
         public InfoPanel InfoPanel { get; private set; }
 
-        protected Sprite MatrixSprite { get; private set; }
+        protected Sprite2D MatrixSprite { get; private set; }
 
         public override void _Ready()
         {
             _global = GetTree().Root.GetNode<AppGlobal>("AppGlobal");
             InfoPanel = GetNode<InfoPanel>("%InfoPanel");
             ControlPanel = GetNode<ControlPanel>("%ControlPanel");
-            MatrixSprite = GetNode<Sprite>("%MatrixSprite");
+            MatrixSprite = GetNode<Sprite2D>("%MatrixSprite");
             
-            ControlPanel.GetNode("CreateNew").Connect("pressed", this, nameof(CreateNewHandler));
-            ControlPanel.GetNode("Run").Connect("toggled", this, nameof(RunHandler));
-            ControlPanel.GetNode("NextGen").Connect("pressed", this, nameof(NextGenerationHandler));
-            ControlPanel.GetNode("Save").Connect("pressed", this, nameof(SaveHandler));
-            ControlPanel.GetNode("Load").Connect("pressed", this, nameof(LoadHandler));
+            ControlPanel.GetNode("CreateNew").Connect("pressed",new Callable(this,nameof(CreateNewHandler)));
+            ControlPanel.GetNode("Run").Connect("toggled",new Callable(this,nameof(RunHandler)));
+            ControlPanel.GetNode("NextGen").Connect("pressed",new Callable(this,nameof(NextGenerationHandler)));
+            ControlPanel.GetNode("Save").Connect("pressed",new Callable(this,nameof(SaveHandler)));
+            ControlPanel.GetNode("Load").Connect("pressed",new Callable(this,nameof(LoadHandler)));
         }
 
-        public override void _Process(float delta)
+        public override void _Process(double delta)
         {
             if (_toProcess <= 0)
                 return;
@@ -58,7 +58,7 @@ namespace CellularAutomaton.UI.Godot
             if (_processor is not null)
             {
                 ProcessNextGeneration(delta);
-                Update();
+                QueueRedraw();
             }
         }
 
@@ -94,10 +94,8 @@ namespace CellularAutomaton.UI.Godot
             _processorOptions = processorOptions;
             _processor = processor;
 
-            var imageTexture = new ImageTexture();
-            var image = new Image();
-            image.Create(matrixSize.X, matrixSize.Y, false, Image.Format.L8);
-            imageTexture.CreateFromImage(image);
+            var image = Image.Create(matrixSize.X, matrixSize.Y, false, Image.Format.L8);
+            var imageTexture = ImageTexture.CreateFromImage(image);
             MatrixSprite.Texture = imageTexture;
 
             _time = 0;
@@ -105,7 +103,7 @@ namespace CellularAutomaton.UI.Godot
             EmitSignal(nameof(TimeChanged), _time);
             EmitSignal(nameof(IterationChanged), 0, 0, 0, 0);
 
-            Update();
+            QueueRedraw();
         }
 
         public void RunHandler(bool pressed)
@@ -120,7 +118,7 @@ namespace CellularAutomaton.UI.Godot
                 _toProcess = 0;
                 var btn = ControlPanel.GetNode<Button>("Run");
                 btn.Text = "Run";
-                btn.Pressed = false;
+                btn.ButtonPressed = false;
             }
         }
 
@@ -147,7 +145,7 @@ namespace CellularAutomaton.UI.Godot
             };
         }
 
-        private void ProcessNextGeneration(float delta)
+        private void ProcessNextGeneration(double delta)
         {
             _time += delta;
             _iteration++;

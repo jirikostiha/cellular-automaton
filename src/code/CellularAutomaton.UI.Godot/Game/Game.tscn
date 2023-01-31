@@ -1,51 +1,47 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://g0e7bpbenlsw"]
 
-[ext_resource path="res://Game/MatrixSprite.gd" type="Script" id=1]
-[ext_resource path="res://Game/InfolPanel.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Game/Arena.cs" type="Script" id=3]
-[ext_resource path="res://Game/ControlPanel.tscn" type="PackedScene" id=4]
+[ext_resource type="Script" path="res://Game/MatrixSprite.gd" id="1"]
+[ext_resource type="PackedScene" path="res://Game/InfolPanel.tscn" id="2"]
+[ext_resource type="Script" path="res://Game/Arena.cs" id="3"]
+[ext_resource type="PackedScene" path="res://Game/ControlPanel.tscn" id="4"]
 
 [node name="GameScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="InfoPanel" parent="VBoxContainer" instance=ExtResource( 2 )]
+[node name="InfoPanel" parent="VBoxContainer" instance=ExtResource("2")]
 unique_name_in_owner = true
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 800.0
-margin_bottom = 14.0
+layout_mode = 2
 size_flags_horizontal = 1
 size_flags_vertical = 1
 
-[node name="ControlPanel" parent="VBoxContainer" instance=ExtResource( 4 )]
+[node name="ControlPanel" parent="VBoxContainer" instance=ExtResource("4")]
 unique_name_in_owner = true
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 18.0
-margin_right = 800.0
-margin_bottom = 70.0
+layout_mode = 2
 size_flags_horizontal = 1
 size_flags_vertical = 1
 
 [node name="Arena" type="ColorRect" parent="VBoxContainer"]
 unique_name_in_owner = true
-margin_top = 74.0
-margin_right = 800.0
-margin_bottom = 800.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-color = Color( 0.0588235, 0.0431373, 0.0431373, 1 )
-script = ExtResource( 3 )
+color = Color(0.0588235, 0.0431373, 0.0431373, 1)
+script = ExtResource("3")
 
-[node name="MatrixSprite" type="Sprite" parent="VBoxContainer/Arena"]
+[node name="MatrixSprite" type="Sprite2D" parent="VBoxContainer/Arena"]
 unique_name_in_owner = true
-scale = Vector2( 2, 2 )
+scale = Vector2(2, 2)
 centered = false
-script = ExtResource( 1 )
+script = ExtResource("1")

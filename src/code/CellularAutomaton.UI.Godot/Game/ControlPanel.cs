@@ -3,7 +3,7 @@ using System;
 
 namespace CellularAutomaton.UI.Godot
 {
-    public class ControlPanel : HBoxContainer
+    public partial class ControlPanel : HBoxContainer
     {
     }
 }

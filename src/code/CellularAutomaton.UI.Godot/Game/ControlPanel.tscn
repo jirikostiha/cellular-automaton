@@ -7,151 +7,151 @@
 [node name="ControlPanel" type="HBoxContainer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_right = -182.0
-margin_bottom = -786.0
-rect_min_size = Vector2( 100, 14 )
+offset_right = -182.0
+offset_bottom = -786.0
+custom_minimum_size = Vector2( 100, 14 )
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource( 1 )
 
 [node name="Sizes" type="VBoxContainer" parent="."]
-margin_right = 265.0
-margin_bottom = 52.0
+offset_right = 265.0
+offset_bottom = 52.0
 
 [node name="XSize" type="HBoxContainer" parent="Sizes"]
-margin_right = 265.0
-margin_bottom = 24.0
+offset_right = 265.0
+offset_bottom = 24.0
 
 [node name="Label" type="Label" parent="Sizes/XSize"]
-margin_top = 5.0
-margin_right = 43.0
-margin_bottom = 19.0
+offset_top = 5.0
+offset_right = 43.0
+offset_bottom = 19.0
 text = "X-size:"
 valign = 1
 
 [node name="XSizeSelection" type="SpinBox" parent="Sizes/XSize"]
 unique_name_in_owner = true
-margin_left = 47.0
-margin_right = 121.0
-margin_bottom = 24.0
+offset_left = 47.0
+offset_right = 121.0
+offset_bottom = 24.0
 min_value = 3.0
 max_value = 1e+06
 value = 128.0
 script = ExtResource( 2 )
 
 [node name="S" type="Button" parent="Sizes/XSize"]
-margin_left = 125.0
-margin_right = 144.0
-margin_bottom = 24.0
+offset_left = 125.0
+offset_right = 144.0
+offset_bottom = 24.0
 text = "S"
 
 [node name="M" type="Button" parent="Sizes/XSize"]
-margin_left = 148.0
-margin_right = 172.0
-margin_bottom = 24.0
+offset_left = 148.0
+offset_right = 172.0
+offset_bottom = 24.0
 text = "M"
 
 [node name="L" type="Button" parent="Sizes/XSize"]
-margin_left = 176.0
-margin_right = 195.0
-margin_bottom = 24.0
+offset_left = 176.0
+offset_right = 195.0
+offset_bottom = 24.0
 text = "L"
 
 [node name="XL" type="Button" parent="Sizes/XSize"]
-margin_left = 199.0
-margin_right = 226.0
-margin_bottom = 24.0
+offset_left = 199.0
+offset_right = 226.0
+offset_bottom = 24.0
 text = "XL"
 
 [node name="XXL" type="Button" parent="Sizes/XSize"]
-margin_left = 230.0
-margin_right = 265.0
-margin_bottom = 24.0
+offset_left = 230.0
+offset_right = 265.0
+offset_bottom = 24.0
 text = "XXL"
 
 [node name="YSize" type="HBoxContainer" parent="Sizes"]
-margin_top = 28.0
-margin_right = 265.0
-margin_bottom = 52.0
+offset_top = 28.0
+offset_right = 265.0
+offset_bottom = 52.0
 
 [node name="Label" type="Label" parent="Sizes/YSize"]
-margin_top = 5.0
-margin_right = 42.0
-margin_bottom = 19.0
+offset_top = 5.0
+offset_right = 42.0
+offset_bottom = 19.0
 text = "Y-size:"
 valign = 1
 
 [node name="YSizeSelection" type="SpinBox" parent="Sizes/YSize"]
 unique_name_in_owner = true
-margin_left = 46.0
-margin_right = 120.0
-margin_bottom = 24.0
+offset_left = 46.0
+offset_right = 120.0
+offset_bottom = 24.0
 min_value = 3.0
 max_value = 1e+06
 value = 128.0
 script = ExtResource( 3 )
 
 [node name="S" type="Button" parent="Sizes/YSize"]
-margin_left = 124.0
-margin_right = 143.0
-margin_bottom = 24.0
+offset_left = 124.0
+offset_right = 143.0
+offset_bottom = 24.0
 text = "S"
 
 [node name="M" type="Button" parent="Sizes/YSize"]
-margin_left = 147.0
-margin_right = 171.0
-margin_bottom = 24.0
+offset_left = 147.0
+offset_right = 171.0
+offset_bottom = 24.0
 text = "M"
 
 [node name="L" type="Button" parent="Sizes/YSize"]
-margin_left = 175.0
-margin_right = 194.0
-margin_bottom = 24.0
+offset_left = 175.0
+offset_right = 194.0
+offset_bottom = 24.0
 text = "L"
 
 [node name="XL" type="Button" parent="Sizes/YSize"]
-margin_left = 198.0
-margin_right = 225.0
-margin_bottom = 24.0
+offset_left = 198.0
+offset_right = 225.0
+offset_bottom = 24.0
 text = "XL"
 
 [node name="XXL" type="Button" parent="Sizes/YSize"]
-margin_left = 229.0
-margin_right = 264.0
-margin_bottom = 24.0
+offset_left = 229.0
+offset_right = 264.0
+offset_bottom = 24.0
 text = "XXL"
 
 [node name="CreateNew" type="Button" parent="."]
-margin_left = 269.0
-margin_right = 309.0
-margin_bottom = 52.0
+offset_left = 269.0
+offset_right = 309.0
+offset_bottom = 52.0
 text = "New"
 
 [node name="NextGen" type="Button" parent="."]
-margin_left = 313.0
-margin_right = 355.0
-margin_bottom = 52.0
+offset_left = 313.0
+offset_right = 355.0
+offset_bottom = 52.0
 text = "Next"
 
 [node name="Run" type="Button" parent="."]
-margin_left = 359.0
-margin_right = 395.0
-margin_bottom = 52.0
+offset_left = 359.0
+offset_right = 395.0
+offset_bottom = 52.0
 toggle_mode = true
 text = "Run"
 
 [node name="Save" type="Button" parent="."]
 visible = false
-margin_left = 399.0
-margin_right = 440.0
-margin_bottom = 52.0
+offset_left = 399.0
+offset_right = 440.0
+offset_bottom = 52.0
 text = "Save"
 
 [node name="Load" type="Button" parent="."]
 visible = false
-margin_left = 399.0
-margin_right = 441.0
-margin_bottom = 52.0
+offset_left = 399.0
+offset_right = 441.0
+offset_bottom = 52.0
 text = "Load"
 
 [connection signal="pressed" from="Sizes/XSize/S" to="Sizes/XSize/XSizeSelection" method="_on_S_pressed"]

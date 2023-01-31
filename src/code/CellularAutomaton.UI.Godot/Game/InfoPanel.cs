@@ -4,7 +4,7 @@ using System.Globalization;
 
 namespace CellularAutomaton.UI.Godot
 {
-    public class InfoPanel : HBoxContainer
+    public partial class InfoPanel : HBoxContainer
     {
         private Label? _timeLabel;
         private Label? _iterationLabel;
@@ -12,7 +12,7 @@ namespace CellularAutomaton.UI.Godot
         private Label? _survivedLabel;
         private Label? _resurectedLabel;
 
-        public float Time { set => _timeLabel.Text = value.ToString("0.0", CultureInfo.InvariantCulture); }
+        public double Time { set => _timeLabel.Text = value.ToString("0.0", CultureInfo.InvariantCulture); }
         public int Iteration { set => _iterationLabel.Text = value.ToString(CultureInfo.InvariantCulture); }
         public int Died { set => _diedLabel.Text = value.ToString(CultureInfo.InvariantCulture); }
         public int Survived { set => _survivedLabel.Text = value.ToString(CultureInfo.InvariantCulture); }
@@ -27,8 +27,8 @@ namespace CellularAutomaton.UI.Godot
             _resurectedLabel = GetNode<Label>("Resurected/Value");
 
             var arena = FindParent("GameScreen").GetNode("%Arena");
-            arena.Connect(nameof(Arena.TimeChanged), this, nameof(TimeChangedHandler));
-            arena.Connect(nameof(Arena.IterationChanged), this, nameof(IterationChangedHandler));
+            arena.Connect(nameof(Arena.TimeChanged),new Callable(this,nameof(TimeChangedHandler)));
+            arena.Connect(nameof(Arena.IterationChanged),new Callable(this,nameof(IterationChangedHandler)));
 
             Time = 0;
             Iteration = 0;
@@ -37,7 +37,7 @@ namespace CellularAutomaton.UI.Godot
             Resurected = 0;
         }
 
-        public void TimeChangedHandler(float time) => Time = time;
+        public void TimeChangedHandler(double time) => Time = time;
 
         public void IterationChangedHandler(int iteration, int died, int survived, int resurected)
         {

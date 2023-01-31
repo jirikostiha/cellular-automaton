@@ -1,68 +1,63 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://c3ax6j8u6psuj"]
 
-[ext_resource path="res://Menu/MainMenu.gd" type="Script" id=3]
-[ext_resource path="res://Menu/themes/menu theme.tres" type="Theme" id=4]
+[ext_resource type="Script" path="res://Menu/MainMenu.gd" id="3"]
+[ext_resource type="Theme" uid="uid://3lgadhvaw4og" path="res://Menu/themes/menu theme.tres" id="4"]
 
 [node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = ExtResource( 4 )
-script = ExtResource( 3 )
-__meta__ = {
-"_edit_vertical_guides_": [ -285.584 ]
-}
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4")
+script = ExtResource("3")
 
 [node name="BackLayer" type="CanvasLayer" parent="."]
 layer = -1
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -178.5
-margin_top = -69.0
-margin_right = 178.5
-margin_bottom = 69.0
+offset_left = -178.5
+offset_top = -69.0
+offset_right = 178.5
+offset_bottom = 69.0
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 350.0
-margin_bottom = 131.0
+layout_mode = 2
 
 [node name="Rows" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
-margin_right = 343.0
-margin_bottom = 124.0
+layout_mode = 2
 
 [node name="Start" type="Button" parent="PanelContainer/MarginContainer/Rows"]
 unique_name_in_owner = true
-margin_right = 343.0
-margin_bottom = 60.0
-rect_min_size = Vector2( 0, 60 )
-focus_neighbour_top = NodePath("../Quit")
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
 size_flags_vertical = 3
+focus_neighbor_top = NodePath("../Quit")
 text = "Start"
 
 [node name="Quit" type="Button" parent="PanelContainer/MarginContainer/Rows"]
-margin_top = 64.0
-margin_right = 343.0
-margin_bottom = 124.0
-rect_min_size = Vector2( 0, 60 )
-focus_neighbour_bottom = NodePath("../Start")
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
 size_flags_vertical = 3
+focus_neighbor_bottom = NodePath("../Start")
 text = "Quit"
 
 [node name="Version" type="Label" parent="."]
+custom_minimum_size = Vector2(100, 20)
+layout_mode = 0
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -166.0
-margin_top = -29.0
-rect_min_size = Vector2( 100, 20 )
+offset_left = -166.0
+offset_top = -29.0
 text = "version: 0.1"
-valign = 1
 
 [connection signal="pressed" from="PanelContainer/MarginContainer/Rows/Start" to="." method="_on_Start_pressed"]
 [connection signal="pressed" from="PanelContainer/MarginContainer/Rows/Quit" to="." method="_on_Quit_pressed"]

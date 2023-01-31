@@ -3,7 +3,7 @@ using System;
 
 namespace CellularAutomaton.UI.Godot
 {
-    public class AppGlobal : Node
+    public partial class AppGlobal : Node
     {
         private static Func<float> _uinProvider;
 
