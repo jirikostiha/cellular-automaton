@@ -1,4 +1,4 @@
-namespace CellularAutomaton
+﻿namespace CellularAutomaton
 {
     using System;
     using System.Collections;

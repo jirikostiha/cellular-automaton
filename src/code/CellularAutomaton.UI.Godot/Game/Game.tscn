@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Game/MatrixSprite.gd" id="1"]
 [ext_resource type="PackedScene" path="res://Game/InfolPanel.tscn" id="2"]
 [ext_resource type="Script" path="res://Game/Arena.cs" id="3"]
-[ext_resource type="PackedScene" path="res://Game/ControlPanel.tscn" id="4"]
+[ext_resource type="PackedScene" uid="uid://bcodti8y0ywy0" path="res://Game/ControlPanel.tscn" id="4"]
 
 [node name="GameScreen" type="Control"]
 layout_mode = 3
