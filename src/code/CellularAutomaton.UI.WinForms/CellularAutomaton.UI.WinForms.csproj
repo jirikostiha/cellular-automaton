@@ -2,13 +2,9 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Wayout.UI" Version="0.6.5.2-devel" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\CellularAutomaton\CellularAutomaton.csproj" />

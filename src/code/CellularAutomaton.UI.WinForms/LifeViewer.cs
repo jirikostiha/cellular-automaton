@@ -11,14 +11,14 @@
     {
         private GenerationProcessor _processor;
         private readonly MatrixToBitmapVizualizer _vizualizer = new MatrixToBitmapVizualizer();
-        private BoolArray2DSerializer2 _serializer;
+        private BoolArray2DSerializer _serializer;
         private int _speedDelayMs = 0;
         private Func<int, int, IArray2D<bool>> _matrixCreator;
 
         public LifeViewer(Func<int, int, IArray2D<bool>> matrixCreator)
         {
             _matrixCreator = matrixCreator;
-            _serializer = new BoolArray2DSerializer2(matrixCreator);
+            _serializer = new BoolArray2DSerializer();
             InitializeComponent();
         }
 
@@ -108,31 +108,25 @@
                 {
                     var strMatrix = _serializer.Serialize(Matrix);
 
-                    using (StreamWriter writer = new StreamWriter(stream))
-                    {
-                        writer.Write(strMatrix);
-                    }
+                    using StreamWriter writer = new StreamWriter(stream);
+                    writer.Write(strMatrix);
                 }
             }
         }
 
         private void LoadButton_Click(object sender, EventArgs e)
         {
-            var fileContent = string.Empty;
-
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 var fileStream = openFileDialog.OpenFile();
-
-                using (var reader = new StreamReader(fileStream))
-                {
-                    fileContent = reader.ReadToEnd();
-                    var matrix = _serializer.Deserialize(fileContent);
-                    _processor = new GenerationProcessor(matrix, ProcessorOptions);
-                    Matrix = matrix;
-                    var bitmap = _vizualizer.Vizualize(Matrix);
-                    gridPictureBox.Image = bitmap;
-                }
+                using var reader = new StreamReader(fileStream);
+                string fileContent = reader.ReadToEnd();
+                var matrix = _serializer.Deserialize(fileContent);
+                _processor = new GenerationProcessor(matrix, ProcessorOptions);
+                Matrix = matrix;
+                
+                var bitmap = _vizualizer.Vizualize(Matrix);
+                gridPictureBox.Image = bitmap;
             }
         }
     }
