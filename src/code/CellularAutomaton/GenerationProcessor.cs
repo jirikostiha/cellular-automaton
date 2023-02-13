@@ -17,7 +17,7 @@ namespace CellularAutomaton
 
             _current = initialMatrix;
             _options = options ?? new();
-            _previous = _current.Clone() as IArray2D<bool>;
+            _previous = (IArray2D<bool>)_current.Clone();
         }
 
         public GenerationProcessorOptions Options => _options;

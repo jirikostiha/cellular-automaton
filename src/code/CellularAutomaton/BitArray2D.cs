@@ -36,7 +36,7 @@ namespace CellularAutomaton
         {
             var bitArrayClone = new BitArray[_arrayList.Length];
             for (int i = 0; i < bitArrayClone.Length; i++)
-                bitArrayClone[i] = _arrayList[i].Clone() as BitArray;
+                bitArrayClone[i] = (BitArray)_arrayList[i].Clone();
 
             return new BitArray2D(bitArrayClone);
         }
