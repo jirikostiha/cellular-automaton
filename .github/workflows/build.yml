@@ -11,8 +11,8 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    
     strategy:
       matrix:
         dotnet-version: [ '2.0.x' ]
@@ -21,10 +21,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+    - name: Install .Net ${{ matrix.dotnet-version }}
       uses: actions/setup-dotnet@v3
       with:
-         dotnet-version: ${{ matrix.dotnet-version }}
+        dotnet-version: ${{ matrix.dotnet-version }}
+    
+    - name: Dotnet Installation Info
+      run: dotnet --info
 
     - name: Restore dependencies
       run: dotnet restore "${{ env.sln-path }}"
