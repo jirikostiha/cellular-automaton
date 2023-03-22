@@ -1,6 +1,8 @@
 name: Auto Approve
 
-on: [push, pull_request_target]
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
 
 jobs:
   auto-approve:
