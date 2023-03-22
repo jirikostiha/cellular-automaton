@@ -4,10 +4,11 @@ env:
   sln-path: "./src/cellular automaton.sln"
 
 on: 
+  workflow_dispatch:
   push:
     paths:
       - 'src/**'
-      - '!src/**.sln' #ignore sln changes
+      - '!src/**.sln'
 
 jobs:
   build:
@@ -17,6 +18,12 @@ jobs:
       matrix:
         dotnet-version: [ '2.0.x' ]
 
+    # required by dorny/test-reporter
+    permissions:
+      contents: read  
+      id-token: write
+      checks: write
+
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -25,24 +32,24 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: ${{ matrix.dotnet-version }}
-    
+
     - name: Dotnet Installation Info
       run: dotnet --info
 
     - name: Restore dependencies
       run: dotnet restore "${{ env.sln-path }}"
 
-    - name: Build #debug build
+    - name: Build
       run: dotnet build "${{ env.sln-path }}" --no-restore
 
     - name: Test
       run: dotnet test "${{ env.sln-path }}" --no-build --logger "trx;LogFileName=test-results.trx" || true
 
-    #- name: Test Report
-    #  uses: dorny/test-reporter@v1
-    #  if: always()
-    #  with:
-    #    name: Tests ${{ matrix.dotnet-version }}
-    #    path: "**/test-results.trx"                            
-    #    reporter: dotnet-trx
-    #    fail-on-error: true
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: Tests ${{ matrix.dotnet-version }}
+        path: "**/test-results.trx"
+        reporter: dotnet-trx
+        fail-on-error: true
