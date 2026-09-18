@@ -1,26 +1,26 @@
-using CommunityToolkit.Diagnostics;
-using System;
-using System.Linq;
+namespace CellularAutomaton;
 
-namespace CellularAutomaton
+/// <summary>
+/// Converts a <see cref="BitArray2D"/> from and to text.
+/// </summary>
+public class BitArray2DSerializer : Array2DSerializerBase
 {
-    public class BitArray2DSerializer : Array2DSerializerBase
+    public string Serialize(BitArray2D array2D) => base.Serialize(array2D);
+
+    /// <summary>
+    /// Fills <paramref name="array2D"/> with the content, or creates a matrix fitting the content
+    /// when no matrix is given.
+    /// </summary>
+    public BitArray2D Deserialize(string content, BitArray2D? array2D = null)
     {
-        public string Serialize(BitArray2D array2D) => base.Serialize(array2D);
-
-        public void Deserialize(string content, BitArray2D? array2D = null)
+        if (array2D is null)
         {
-            Guard.IsNotNullOrEmpty(content);
-
-            var lines = content.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
-            var xmax = lines.First().Length;
-            array2D ??= BitArray2D.Create(xmax, lines.Length);
-            
-            for (int y = 0; y < Math.Min(lines.Length, array2D.YCount); y++)
-            {
-                for (int x = 0; x < Math.Min(lines[y].Length, array2D.XCount); x++)
-                    array2D.SetAt(x, y, lines[y][x] == TrueValue);
-            }
+            var size = MeasureContent(content);
+            array2D = BitArray2D.Create(size.X, size.Y);
         }
+
+        Deserialize(content, array2D, array2D.XCount, array2D.YCount);
+
+        return array2D;
     }
 }
