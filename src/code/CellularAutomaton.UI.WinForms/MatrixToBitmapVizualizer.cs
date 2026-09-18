@@ -1,55 +1,79 @@
-﻿namespace CellularAutomaton.UI.WinForms
+namespace CellularAutomaton.UI.WinForms;
+
+using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
+
+/// <summary>
+/// Renders a boolean matrix into a <see cref="Bitmap"/>.
+/// </summary>
+/// <remarks>
+/// The pixels are written through <see cref="Bitmap.LockBits(Rectangle, ImageLockMode, PixelFormat)"/>
+/// into a reused buffer. <see cref="Bitmap.SetPixel"/> costs a GDI+ call per pixel, which is orders
+/// of magnitude slower and dominates the frame time of larger matrices.
+/// </remarks>
+public sealed class MatrixToBitmapVizualizer
 {
-    using System;
-    using System.Drawing;
+    private const PixelFormat Format = PixelFormat.Format32bppPArgb;
 
-    public class MatrixToBitmapVizualizer
+    private int[] _buffer = Array.Empty<int>();
+
+    public Color LiveColor { get; set; } = Color.Black;
+
+    public Color DeadColor { get; set; } = Color.White;
+
+    /// <summary>
+    /// Creates a bitmap matching the size of the matrix.
+    /// </summary>
+    public static Bitmap CreateBitmap(IReadableArray2D<bool> matrix)
     {
-        public Color LiveColor { get; set; } = Color.Black;
-        
-        public Color DeadColor { get; set; } = Color.White;
+        ArgumentNullException.ThrowIfNull(matrix);
 
-        public Bitmap Vizualize(IArray2D<bool> matrix, Bitmap bitmap = null)
+        return new Bitmap(Math.Max(matrix.XCount, 1), Math.Max(matrix.YCount, 1), Format);
+    }
+
+    /// <summary>
+    /// Draws the matrix into <paramref name="bitmap"/>, creating a new one when it is missing or
+    /// does not match the size of the matrix.
+    /// </summary>
+    public Bitmap Vizualize(IReadableArray2D<bool> matrix, Bitmap? bitmap = null)
+    {
+        ArgumentNullException.ThrowIfNull(matrix);
+
+        int xcount = matrix.XCount;
+        int ycount = matrix.YCount;
+        if (bitmap is null || bitmap.Width != xcount || bitmap.Height != ycount || bitmap.PixelFormat != Format)
         {
-            bitmap ??= new Bitmap(matrix.XCount, matrix.YCount);
-
-            for (var x1 = 0; x1 < bitmap.Width; x1++)
-                for (var x2 = 0; x2 < bitmap.Height; x2++)
-                    bitmap.SetPixel(x1, x2, matrix.GetAt(x1,x2) ? LiveColor : DeadColor);
-
-            return bitmap;
+            bitmap?.Dispose();
+            bitmap = new Bitmap(Math.Max(xcount, 1), Math.Max(ycount, 1), Format);
         }
 
-        //?
-        public Bitmap Vizualize2(IArray2D<bool> matrix, Bitmap bitmap = null)
-        {
-            bitmap ??= new Bitmap(matrix.XCount, matrix.YCount);
-
-            // Lock the bitmap's bits.  
-            var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-            System.Drawing.Imaging.BitmapData bmpData = bitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadWrite, bitmap.PixelFormat);
-
-            // Get the address of the first line.
-            IntPtr ptr = bmpData.Scan0;
-
-            // Declare an array to hold the bytes of the bitmap.
-            //int bytes = Math.Abs(bmpData.Stride) * bitmap.Height;
-            //byte[] rgbValues = new byte[bytes];
-
-            // Copy the RGB values into the array.
-            //System.Runtime.InteropServices.Marshal.Copy(ptr, rgbValues, 0, bytes);
-
-            // Set every third value to 255. A 24bpp bitmap will look red.
-            //for (int counter = 2; counter < rgbValues.Length; counter += 3)
-              //  rgbValues[counter] = 255;
-
-            // Copy the RGB values back to the bitmap
-            //System.Runtime.InteropServices.Marshal.Copy(rgbValues, 0, ptr, bytes);
-
-            // Unlock the bits.
-            bitmap.UnlockBits(bmpData);
-
+        if (xcount == 0 || ycount == 0)
             return bitmap;
+
+        if (_buffer.Length < xcount)
+            _buffer = new int[xcount];
+
+        int live = LiveColor.ToArgb();
+        int dead = DeadColor.ToArgb();
+
+        var data = bitmap.LockBits(new Rectangle(0, 0, xcount, ycount), ImageLockMode.WriteOnly, Format);
+        try
+        {
+            for (int y = 0; y < ycount; y++)
+            {
+                for (int x = 0; x < xcount; x++)
+                    _buffer[x] = matrix.GetAt(x, y) ? live : dead;
+
+                Marshal.Copy(_buffer, 0, data.Scan0 + (y * data.Stride), xcount);
+            }
         }
+        finally
+        {
+            bitmap.UnlockBits(data);
+        }
+
+        return bitmap;
     }
 }

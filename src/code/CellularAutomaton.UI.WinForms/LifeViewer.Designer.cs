@@ -1,4 +1,6 @@
-﻿namespace CellularAutomaton.UI.WinForms
+﻿#nullable disable
+
+namespace CellularAutomaton.UI.WinForms
 {
     partial class LifeViewer
     {
