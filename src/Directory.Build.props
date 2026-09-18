@@ -1,11 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<!-- Common properties -->
+<Project>
+
+	<!-- Imported by every project below src/, on every platform. MSBuild looks the file up by the
+	     exact name "Directory.Build.props", so it must not be renamed. -->
 	<PropertyGroup>
-		<!-- SolutionDir is not defined when building projects explicitly -->
-		<SolutionDir Condition=" '$(SolutionDir)' == '' ">$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildProjectDirectory), MySolution.sln))\</SolutionDir>
-		<!-- Output paths -->
-		<BaseOutputPath>..\..\..\asm\$(MSBuildProjectName)\bin\</BaseOutputPath>
-		<BaseIntermediateOutputPath>..\..\..\asm\$(MSBuildProjectName)\obj\</BaseIntermediateOutputPath>
+		<!-- Keep the build output of all projects together, out of the source tree. -->
+		<BaseOutputPath>$(MSBuildThisFileDirectory)..\asm\$(MSBuildProjectName)\bin\</BaseOutputPath>
+		<BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\asm\$(MSBuildProjectName)\obj\</BaseIntermediateOutputPath>
 	</PropertyGroup>
+
+	<PropertyGroup>
+		<NeutralLanguage>en</NeutralLanguage>
+		<InvariantGlobalization>true</InvariantGlobalization>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisLevel>latest-recommended</AnalysisLevel>
+		<!-- Underscores are the convention of the test and benchmark method names here. -->
+		<NoWarn>$(NoWarn);CA1707</NoWarn>
+	</PropertyGroup>
+
 </Project>
