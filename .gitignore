@@ -15,6 +15,9 @@
 #---tests---
 [Tt]est[Rr]esult*/
 
+#---benchmarks---
+BenchmarkDotNet.Artifacts/
+
 #---logging---
 [Ll]og/
 [Bb]uild[Ll]og.*
