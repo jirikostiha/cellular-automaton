@@ -1,0 +1,20 @@
+<Project>
+
+	<!-- Imported by every project below src/, on every platform. MSBuild looks the file up by the
+	     exact name "Directory.Build.props", so it must not be renamed. -->
+	<PropertyGroup>
+		<!-- Keep the build output of all projects together, out of the source tree. -->
+		<BaseOutputPath>$(MSBuildThisFileDirectory)..\asm\$(MSBuildProjectName)\bin\</BaseOutputPath>
+		<BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)..\asm\$(MSBuildProjectName)\obj\</BaseIntermediateOutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<NeutralLanguage>en</NeutralLanguage>
+		<InvariantGlobalization>true</InvariantGlobalization>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<AnalysisLevel>latest-recommended</AnalysisLevel>
+		<!-- Underscores are the convention of the test and benchmark method names here. -->
+		<NoWarn>$(NoWarn);CA1707</NoWarn>
+	</PropertyGroup>
+
+</Project>

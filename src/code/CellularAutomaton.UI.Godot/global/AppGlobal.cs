@@ -1,22 +1,16 @@
 using Godot;
-using System;
 
-namespace CellularAutomaton.UI.Godot
+namespace CellularAutomaton.UI.Godot;
+
+/// <summary>
+/// Autoloaded singleton with the random helpers shared by the scenes.
+/// </summary>
+public partial class AppGlobal : Node
 {
-    public partial class AppGlobal : Node
-    {
-        private static Func<float> _uinProvider;
+    public static int NextInt(int min, int max) => Random.Shared.Next(min, max);
 
-        static AppGlobal()
-        {
-            var rnd = new Random((int)DateTime.Now.Ticks & 0x0000FFFF);
-            _uinProvider = () => (float)rnd.NextDouble();
-        }
+    public static float NextFloat(float inclusiveMin, float exclusiveMax)
+        => inclusiveMin + (Random.Shared.NextSingle() * (exclusiveMax - inclusiveMin));
 
-        public static int NextInt(int min, int max) => min + Convert.ToInt32(_uinProvider() * (max - min));
-
-        public static float NextFloat(float inclusiveMin, float exclusiveMax) => inclusiveMin + _uinProvider() * (exclusiveMax - inclusiveMin);
-
-        public static bool NextBool() => _uinProvider() < 0.5f ? false : true;
-    }
+    public static bool NextBool() => Random.Shared.Next(2) == 1;
 }

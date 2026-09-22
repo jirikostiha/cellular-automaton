@@ -1,14 +1,9 @@
-﻿using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Running;
 
-namespace CellularAutomaton
+namespace CellularAutomaton;
+
+public static class Program
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var a = BenchmarkRunner.Run<ProcessorNextGeneration>();
-
-            Console.ReadKey();
-        }
-    }
+    public static void Main(string[] args)
+        => BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
 }

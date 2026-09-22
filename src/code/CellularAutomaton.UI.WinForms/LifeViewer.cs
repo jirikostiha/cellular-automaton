@@ -1,133 +1,224 @@
-﻿namespace CellularAutomaton.UI.WinForms
+namespace CellularAutomaton.UI.WinForms;
+
+using System;
+using System.Drawing;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using CellularAutomaton;
+
+public partial class LifeViewer : Form
 {
-    using System;
-    using System.IO;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using System.Windows.Forms;
-    using CellularAutomaton;
+    private readonly MatrixToBitmapVizualizer _vizualizer = new();
+    private readonly BitArray2DSerializer _serializer = new();
+    private readonly Func<int, int, IArray2D<bool>> _matrixCreator;
 
-    public partial class LifeViewer : Form
+    // Two bitmaps are alternated so that the one being painted by the picture box is never the one
+    // written to by the next generation.
+    private Bitmap? _frontBuffer;
+    private Bitmap? _backBuffer;
+
+    private GenerationProcessor? _processor;
+    private CancellationTokenSource? _cts;
+    private Task _runTask = Task.CompletedTask;
+    private bool _busy;
+    private int _speedDelayMs;
+
+    public LifeViewer(Func<int, int, IArray2D<bool>> matrixCreator)
     {
-        private GenerationProcessor _processor;
-        private readonly MatrixToBitmapVizualizer _vizualizer = new MatrixToBitmapVizualizer();
-        private BoolArray2DSerializer _serializer;
-        private int _speedDelayMs = 0;
-        private Func<int, int, IArray2D<bool>> _matrixCreator;
+        _matrixCreator = matrixCreator ?? throw new ArgumentNullException(nameof(matrixCreator));
 
-        public LifeViewer(Func<int, int, IArray2D<bool>> matrixCreator)
+        InitializeComponent();
+
+        FormClosing += (_, _) => _cts?.Cancel();
+        FormClosed += (_, _) =>
         {
-            _matrixCreator = matrixCreator;
-            _serializer = new BoolArray2DSerializer();
-            InitializeComponent();
-        }
+            // A generation may still be rendering into a buffer, in that case the bitmaps are left
+            // to the garbage collector instead of being disposed underneath it.
+            if (_runTask.IsCompleted)
+                ReleaseBuffers();
+            else
+                gridPictureBox.Image = null;
+        };
+    }
 
-        public GenerationProcessorOptions ProcessorOptions { get; set; }
+    public GenerationProcessorOptions? ProcessorOptions { get; set; }
 
-        public IArray2D<bool> Matrix { get; private set; }
+    public IArray2D<bool>? Matrix { get; private set; }
 
-        public int GenerationNumber { get; private set; }
+    public int GenerationNumber { get; private set; }
 
-        private async Task NextIteration()
+    private async Task NextIterationAsync()
+    {
+        var processor = _processor;
+        var matrix = Matrix;
+        if (processor is null || matrix is null || _busy)
+            return;
+
+        _busy = true;
+        try
         {
+            var target = _backBuffer;
             var bitmap = await Task.Run(() =>
             {
-                var stats = _processor.Next();
-                return _vizualizer.Vizualize(Matrix);
-            });
+                processor.Next();
 
-            gridPictureBox.Image = bitmap;
+                return _vizualizer.Vizualize(matrix, target);
+            }).ConfigureAwait(true);
+
+            ShowFrame(bitmap);
             GenerationNumber++;
             GenerationTextBox.Text = GenerationNumber.ToString();
         }
-
-        private async Task Run(CancellationToken ct)
+        finally
         {
-            while (!ct.IsCancellationRequested)
-            {
-                await NextIteration();
-                if (_speedDelayMs > 10)
-                    await Task.Delay(_speedDelayMs, ct);
-            }
+            _busy = false;
+        }
+    }
+
+    private async Task RunAsync(CancellationToken ct)
+    {
+        while (!ct.IsCancellationRequested)
+        {
+            await NextIterationAsync().ConfigureAwait(true);
+            if (_speedDelayMs > 10)
+                await Task.Delay(_speedDelayMs, ct).ConfigureAwait(true);
+        }
+    }
+
+    private void ShowFrame(Bitmap bitmap)
+    {
+        // The rendered bitmap becomes the front buffer, the previous one is reused next time.
+        _backBuffer = ReferenceEquals(bitmap, _frontBuffer) ? _backBuffer : _frontBuffer;
+        _frontBuffer = bitmap;
+        gridPictureBox.Image = bitmap;
+        gridPictureBox.Invalidate();
+    }
+
+    private async Task SetMatrixAsync(IArray2D<bool> matrix)
+    {
+        await StopAsync().ConfigureAwait(true);
+        ReleaseBuffers();
+
+        Matrix = matrix;
+        _processor = new GenerationProcessor(matrix, ProcessorOptions);
+        GenerationNumber = 0;
+        GenerationTextBox.Text = GenerationNumber.ToString();
+
+        ShowFrame(_vizualizer.Vizualize(matrix));
+    }
+
+    private void ReleaseBuffers()
+    {
+        gridPictureBox.Image = null;
+        _frontBuffer?.Dispose();
+        _backBuffer?.Dispose();
+        _frontBuffer = null;
+        _backBuffer = null;
+    }
+
+    /// <summary>
+    /// Stops the running loop and waits until the generation in flight is finished, so that the
+    /// buffers it writes to are not released underneath it.
+    /// </summary>
+    private async Task StopAsync()
+    {
+        var cts = _cts;
+        if (cts is null)
+            return;
+
+        _cts = null;
+        cts.Cancel();
+        try
+        {
+            await _runTask.ConfigureAwait(true);
+        }
+        catch (OperationCanceledException)
+        {
+            // Stopped by the user.
+        }
+        finally
+        {
+            cts.Dispose();
+            _runTask = Task.CompletedTask;
+            RunButton.Text = "Run";
+        }
+    }
+
+    private async void CreateRandomButton_Click(object? sender, EventArgs e)
+        => await SetMatrixAsync(_matrixCreator((int)X1Num.Value, (int)X2Num.Value)).ConfigureAwait(true);
+
+    private async void NextButton_Click(object? sender, EventArgs e)
+        => await NextIterationAsync().ConfigureAwait(true);
+
+    private async void RunButton_Click(object? sender, EventArgs e)
+    {
+        if (_cts is not null)
+        {
+            await StopAsync().ConfigureAwait(true);
+
+            return;
         }
 
-        private void CreateRandomButton_Click(object sender, EventArgs e)
-        {
-            int xcount = (int)X1Num.Value;
-            int ycount = (int)X2Num.Value;
-            var matrix = _matrixCreator(xcount, ycount);
-            _processor = new GenerationProcessor(matrix, ProcessorOptions);
-            Matrix = matrix;
-            GenerationNumber = 0;
-            GenerationTextBox.Text = GenerationNumber.ToString();
+        if (_processor is null)
+            return;
 
-            var bitmap = _vizualizer.Vizualize(Matrix);
-            gridPictureBox.Image = bitmap;
+        var cts = new CancellationTokenSource();
+        _cts = cts;
+        RunButton.Text = "Stop";
+        _runTask = RunAsync(cts.Token);
+        try
+        {
+            await _runTask.ConfigureAwait(true);
+        }
+        catch (OperationCanceledException)
+        {
+            // Stopped by the user.
         }
 
-        private async void NextButton_Click(object sender, EventArgs e)
+        if (ReferenceEquals(_cts, cts))
         {
-            await NextIteration();
+            _cts = null;
+            cts.Dispose();
+            _runTask = Task.CompletedTask;
+            RunButton.Text = "Run";
         }
+    }
 
-        private CancellationTokenSource _cts;
+    private void SpeedTrackBar_ValueChanged(object? sender, EventArgs e)
+    {
+        _speedDelayMs = SpeedTrackBar.Value;
+        DelayTextBox.Text = _speedDelayMs.ToString();
+    }
 
-        private async void RunButton_Click(object sender, EventArgs e)
-        {
-            if (_cts == null)
-            {
-                _cts = new CancellationTokenSource();
-                RunButton.Text = "Stop";
-                try
-                {
-                    await Run(_cts.Token);
-                }
-                catch (TaskCanceledException)
-                {}
-            }
-            else
-            {
-                _cts.Cancel();
-                _cts = null;
-                RunButton.Text = "Run";
-            }
-        }
+    private void SaveButton_Click(object? sender, EventArgs e)
+    {
+        if (Matrix is null || saveFileDialog.ShowDialog() != DialogResult.OK)
+            return;
 
-        private void SpeedTrackBar_ValueChanged(object sender, EventArgs e)
-        {
-            _speedDelayMs = SpeedTrackBar.Value;
-            DelayTextBox.Text = _speedDelayMs.ToString();
-        }
+        using var stream = saveFileDialog.OpenFile();
+        if (stream is null)
+            return;
 
-        private void SaveButton_Click(object sender, EventArgs e)
-        {
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                Stream stream;
-                if ((stream = saveFileDialog.OpenFile()) != null)
-                {
-                    var strMatrix = _serializer.Serialize(Matrix);
+        using var writer = new StreamWriter(stream);
+        writer.Write(_serializer.Serialize(Matrix));
+    }
 
-                    using StreamWriter writer = new StreamWriter(stream);
-                    writer.Write(strMatrix);
-                }
-            }
-        }
+    private async void LoadButton_Click(object? sender, EventArgs e)
+    {
+        if (openFileDialog.ShowDialog() != DialogResult.OK)
+            return;
 
-        private void LoadButton_Click(object sender, EventArgs e)
-        {
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                var fileStream = openFileDialog.OpenFile();
-                using var reader = new StreamReader(fileStream);
-                string fileContent = reader.ReadToEnd();
-                var matrix = _serializer.Deserialize(fileContent);
-                _processor = new GenerationProcessor(matrix, ProcessorOptions);
-                Matrix = matrix;
-                
-                var bitmap = _vizualizer.Vizualize(Matrix);
-                gridPictureBox.Image = bitmap;
-            }
-        }
+        using var stream = openFileDialog.OpenFile();
+        if (stream is null)
+            return;
+
+        using var reader = new StreamReader(stream);
+        var content = reader.ReadToEnd();
+        if (string.IsNullOrEmpty(content))
+            return;
+
+        await SetMatrixAsync(_serializer.Deserialize(content)).ConfigureAwait(true);
     }
 }

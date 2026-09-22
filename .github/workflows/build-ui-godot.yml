@@ -1,24 +1,24 @@
-name: Build Winforms UI
+name: Build Godot UI
 
 env:
-  sln-path: "./src/cellular automaton winforms.sln"
+  sln-path: "./src/cellular automaton godot.sln"
   dotnet-version: "8.0.x"
 
 on:
   push:
     paths:
       - 'src/code/CellularAutomaton/**'
-      - 'src/code/CellularAutomaton.UI.WinForms/**'
-      - '.github/workflows/build-ui-winforms.yml'
+      - 'src/code/CellularAutomaton.UI.Godot/**'
+      - '.github/workflows/build-ui-godot.yml'
   pull_request:
     paths:
       - 'src/code/CellularAutomaton/**'
-      - 'src/code/CellularAutomaton.UI.WinForms/**'
-      - '.github/workflows/build-ui-winforms.yml'
+      - 'src/code/CellularAutomaton.UI.Godot/**'
+      - '.github/workflows/build-ui-godot.yml'
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout
@@ -27,7 +27,7 @@ jobs:
     - name: Setup .NET SDK ${{ env.dotnet-version }}
       uses: actions/setup-dotnet@v4
       with:
-         dotnet-version: ${{ env.dotnet-version }}
+        dotnet-version: ${{ env.dotnet-version }}
 
     - name: Restore dependencies
       run: dotnet restore "${{ env.sln-path }}"

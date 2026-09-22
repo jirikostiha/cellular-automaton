@@ -1,16 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
 		<IsTestProject>true</IsTestProject>
 		<IsPackable>false</IsPackable>
 		<IsPublishable>false</IsPublishable>
 		<RootNamespace>CellularAutomaton</RootNamespace>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <Compile Remove="BoolArray2DSerializer2Tests.cs" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
